@@ -7,8 +7,6 @@ import discord
 from dotenv import load_dotenv
 from datetime import datetime, timezone
 
-import asyncio
-
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
