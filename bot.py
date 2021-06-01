@@ -1,6 +1,8 @@
 # bot.py
 import os
 
+import time
+
 import discord
 from dotenv import load_dotenv
 from datetime import datetime, timezone
@@ -26,11 +28,13 @@ defaultDaysToWait = 3
 async def on_ready():
     print(f'{client.user} has joined')
 
-    #TODO make this properly async for each guild
-    for guild in client.guilds:
-        print(guild)
-        print(guild.id)
-        await remove_members_from_guild(guild)
+    while(True):
+        #TODO make this properly async for each guild
+        for guild in client.guilds:
+            print(guild)
+            print(guild.id)
+            await remove_members_from_guild(guild)
+        time.sleep(86400) #sleep for a day
         
 
 
@@ -38,7 +42,10 @@ async def remove_members_from_guild(guild):
     for member in guild.members:
         if(remove_member_with_role(member)):
             print(f'{member.name} was kicked')
-            await member.kick(reason="Was on wait list for more than 3 days.")
+            try:
+                await member.kick(reason="Was on wait list for more than 3 days.")
+            except:
+                print(f'Error kicking {member.name}')
 
 
 def days_since(date):
