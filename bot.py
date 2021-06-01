@@ -1,11 +1,11 @@
 # bot.py
 import os
 
-import time
-
 import discord
 from dotenv import load_dotenv
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
+
+import asyncio
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -19,34 +19,34 @@ client = discord.Client(intents=intents)
 #defaultPrefix = "%"
 
 #roleToRemove = {}
-defaultRoleToRemove = "Guest"
+defaultRoleToRemove = "Wait List"
 defaultDaysToWait = 3
 
 @client.event
 async def on_ready():
     print(f'{client.user} has joined')
 
-    """
-    while(True):
-        for guild in client.guilds:
-            print(guild)
-        time.sleep(5)
-    """
-    #time.sleep(5)
+    #TODO make this properly async for each guild
     for guild in client.guilds:
-            print(guild)
-            for member in guild.members:
-                if(removeMemberWithRole(member)):
-                    print(member.name)  #todo call kick on member
+        print(guild)
+        print(guild.id)
+        await remove_members_from_guild(guild)
+        
 
 
-def TimeInDaysSince(date):
+async def remove_members_from_guild(guild):
+    for member in guild.members:
+        if(remove_member_with_role(member)):
+            print(f'{member.name} was kicked')
+            await member.kick(reason="Was on wait list for more than 3 days.")
+
+
+def days_since(date):
     currentDate = datetime.now(timezone.utc).replace(tzinfo=None)
     timeDiff = currentDate - date
     return timeDiff.days
 
-
-def removeMemberWithRole(member):
+def remove_member_with_role(member):
 
     hasRoleFlag = False
     removeFlag = False
@@ -58,13 +58,10 @@ def removeMemberWithRole(member):
     if(not hasRoleFlag): 
         return False
     
-    if(defaultDaysToWait <= TimeInDaysSince(member.joined_at)):
+    if(defaultDaysToWait <= days_since(member.joined_at)):
         removeFlag = True
     
     return removeFlag
     
 
-    
-
-#client = CustomClient(discord_client)
 client.run(TOKEN)
