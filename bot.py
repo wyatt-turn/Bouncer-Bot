@@ -26,13 +26,11 @@ defaultDaysToWait = 3
 async def on_ready():
     print(f'{client.user} has joined')
 
-    while(True):
-        #TODO make this properly async for each guild
-        for guild in client.guilds:
-            print(guild)
-            print(guild.id)
-            await remove_members_from_guild(guild)
-        time.sleep(86400) #sleep for a day
+    #TODO make this properly async for each guild
+    for guild in client.guilds:
+        print(guild)
+        print(guild.id)
+        await remove_members_from_guild(guild)
         
 
 
@@ -47,7 +45,7 @@ async def remove_members_from_guild(guild):
 
 
 def days_since(date):
-    currentDate = datetime.now(timezone.utc).replace(tzinfo=None)
+    currentDate = datetime.now(timezone.utc)
     timeDiff = currentDate - date
     return timeDiff.days
 
