@@ -48,7 +48,7 @@ async def remove_members_from_guild(guild):
 
 def days_since(date):
     currentDate = datetime.now(timezone.utc)
-    currentDate = currentDate.replace(tzinfo=None)
+    #currentDate = currentDate.replace(tzinfo=None)
     timeDiff = currentDate - date
     return timeDiff.days
 
