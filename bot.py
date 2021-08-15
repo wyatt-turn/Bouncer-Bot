@@ -31,6 +31,8 @@ async def on_ready():
         print(guild)
         print(guild.id)
         await remove_members_from_guild(guild)
+    
+    await client.close()
         
 
 
@@ -46,6 +48,7 @@ async def remove_members_from_guild(guild):
 
 def days_since(date):
     currentDate = datetime.now(timezone.utc)
+    currentDate = currentDate.replace(tzinfo=None)
     timeDiff = currentDate - date
     return timeDiff.days
 
